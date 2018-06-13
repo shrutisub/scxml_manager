@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>scxml_manager</name>
+  <version>0.1.0</version>
+  <description>The SCXML manager packages. It contains the SCXML interpreter usage.</description>
+
+  <maintainer email="ludovic.delval@ipa.fhg.de">Ludovic DELVAL</maintainer>
+
+  <license>BSD</license>
+
+
+  <!-- <url type="website">http://wiki.ros.org/scxml_interpreter</url> -->
+
+  <author email="ludovic.delval@ipa.fhg.de">Ludovic Delval</author>
+  <author email="shruti.subramanian@ipa.fhg.de">Shruti Subramanian</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>rostest</build_depend>
+  <depend>rospy</depend>
+  <depend>scxml_interpreter</depend>
+  <depend>qt_smach_viewer</depend>
+
+
+
+  <export>
+
+  </export>
+</package>

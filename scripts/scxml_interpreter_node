@@ -1,0 +1,43 @@
+#!/usr/bin/env python
+
+import rospy
+
+import rospkg
+import os
+import sys
+from scxml_interpreter.scxml_parser import SCXMLParser
+from scxml_interpreter.state_provider import SmachStateProvider
+from scxml_interpreter.smach_builder import SmachBuilder
+
+from qt_smach_viewer.introspection import IntrospectionServer
+
+if __name__ == "__main__":
+    rospy.init_node('scxml_interprefeter_simple_node')
+    ## Parsing SCXML
+    file = rospy.get_param("~scxml_file", "simple_file.scxml")
+    interpreter = SCXMLParser()
+    if(os.path.isfile(file)):
+        interface = interpreter.parsing_scxml(file)
+    else:
+        pkg_path = rospkg.RosPack().get_path("scxml_manager")
+        file = os.path.join(pkg_path, "resources/" + file)
+        if(os.path.isfile(file)):
+            interface = interpreter.parsing_scxml(file)
+        else:
+            rospy.logerr("File not found")
+            sys.exit(-1)
+            
+    ## Building SMACH SM
+    provider = SmachStateProvider("scxml_manager")
+    builder = SmachBuilder(interface, [provider])
+    SM = builder.build_state_machine()
+    
+    ## Run SM
+    introspection = IntrospectionServer(SM)
+    introspection.start()
+    rospy.sleep(2.0)
+    SM.execute()
+    rospy.sleep(5.0)
+    introspection.stop()
+    
+    
