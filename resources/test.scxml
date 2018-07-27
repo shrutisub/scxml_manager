@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" binding="early" xmlns:qt="http://www.qt.io/2015/02/scxml-ext" name="generic_skill" qt:editorversion="4.4.1" initial="Movearticular">
+    <qt:editorinfo initialGeometry="492;-40;-20;-20;40;40"/>
+    <final id="Final">
+        <qt:editorinfo geometry="518.84;512.67;-20;-20;40;40" scenegeometry="518.84;512.67;498.84;492.67;40;40"/>
+    </final>
+    <datamodel>
+        <data id="groups" expr="manip">
+            <qt:editorinfo geometry="-2.15;-27.99;0;0;0;0"/>
+        </data>
+    </datamodel>
+    <state id="Movearticular">
+        <qt:editorinfo geometry="347.46;233.25;-77.25;-159.84;497.26;347.35" scenegeometry="347.46;233.25;270.21;73.41;497.26;347.35"/>
+        <transition type="external" event="success" target="Final">
+            <qt:editorinfo movePoint="2.39;81.99" localGeometry="-6.84;215.91"/>
+        </transition>
+        <datamodel>
+            <data id="group" expr="manipulator"/>
+            <data id="vel_factor" expr="0.5"/>
+            <data id="position" expr="[0.23, -0.7, 1, 1.2, -1.3, 1.4]"/>
+            <data id="type" expr="degree"/>
+            <data id="joint_name" expr="['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint', 'wrist_1_joint','wrist_2_joint','wrist_3_joint']"/>
+        </datamodel>
+        <transition type="external" event="preempt" target="Final_3">
+            <qt:editorinfo movePoint="4;3"/>
+        </transition>
+    </state>
+    <final id="Final_3">
+        <qt:editorinfo geometry="387;529;-20;-20;40;40" scenegeometry="387;529;367;509;40;40"/>
+    </final>
+</scxml>
