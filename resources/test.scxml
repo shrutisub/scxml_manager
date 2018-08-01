@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" binding="early" xmlns:qt="http://www.qt.io/2015/02/scxml-ext" name="generic_skill" qt:editorversion="4.4.1" initial="Movearticular">
-    <qt:editorinfo initialGeometry="492;-40;-20;-20;40;40"/>
-    <final id="Final">
-        <qt:editorinfo geometry="518.84;512.67;-20;-20;40;40" scenegeometry="518.84;512.67;498.84;492.67;40;40"/>
-    </final>
+<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" binding="early" xmlns:qt="http://www.qt.io/2015/02/scxml-ext" name="generic_skill" qt:editorversion="4.4.1" initial="Choice">
+    <qt:editorinfo initialGeometry="524.85;-48.76;-20;-20;40;40"/>
     <datamodel>
         <data id="groups" expr="manip">
             <qt:editorinfo geometry="-2.15;-27.99;0;0;0;0"/>
         </data>
     </datamodel>
+    <final id="Final">
+        <qt:editorinfo geometry="139.68;716.18;-20;-20;40;40" scenegeometry="139.68;716.18;119.68;696.18;40;40"/>
+    </final>
+    <final id="Final_3">
+        <qt:editorinfo geometry="5.69;643.07;-20;-20;40;40" scenegeometry="5.69;643.07;-14.31;623.07;40;40"/>
+    </final>
     <state id="Movearticular">
-        <qt:editorinfo geometry="347.46;233.25;-77.25;-159.84;497.26;347.35" scenegeometry="347.46;233.25;270.21;73.41;497.26;347.35"/>
+        <qt:editorinfo geometry="127.15;434.12;50.44;-231.17;241.88;272" scenegeometry="127.15;434.12;177.59;202.95;241.88;272"/>
         <transition type="external" event="success" target="Final">
-            <qt:editorinfo movePoint="2.39;81.99" localGeometry="-6.84;215.91"/>
+            <qt:editorinfo movePoint="2.39;81.99"/>
         </transition>
         <datamodel>
             <data id="group" expr="manipulator"/>
@@ -25,7 +28,37 @@
             <qt:editorinfo movePoint="4;3"/>
         </transition>
     </state>
-    <final id="Final_3">
-        <qt:editorinfo geometry="387;529;-20;-20;40;40" scenegeometry="387;529;367;509;40;40"/>
+    <state id="Choice">
+        <qt:editorinfo geometry="559.63;72.70;-129.56;-50;189.56;100" scenegeometry="559.63;72.70;430.07;22.70;189.56;100"/>
+        <transition type="external" event="Transition_3" target="Movearticular">
+            <qt:editorinfo endTargetFactors="75.98;11.92"/>
+        </transition>
+        <datamodel>
+            <data id="movement" expr="Movecartesian"/>
+        </datamodel>
+        <transition type="external" event="preempt" target="Final_6"/>
+        <transition type="external" event="Transition_4" target="Movecartesian">
+            <qt:editorinfo endTargetFactors="29.24;3.36"/>
+        </transition>
+    </state>
+    <final id="Final_6">
+        <qt:editorinfo geometry="230.17;72.70;-20;-20;40;40" scenegeometry="230.17;72.70;210.17;52.70;40;40"/>
+    </final>
+    <state id="Movecartesian">
+        <qt:editorinfo geometry="857.15;383.12;-153.50;-159.84;268.51;202.35" scenegeometry="857.15;383.12;703.65;223.28;268.51;202.35"/>
+        <datamodel>
+            <data id="group" expr="manipulator"/>
+            <data id="target" expr="[0.23, 0.7, 0.4, 0, 0.7, 0,0.7]"/>
+        </datamodel>
+        <transition type="external" event="preempt" target="Final_12">
+            <qt:editorinfo movePoint="0;-1"/>
+        </transition>
+        <transition type="external" event="success" target="Final_13"/>
+    </state>
+    <final id="Final_12">
+        <qt:editorinfo geometry="720;636;-20;-20;40;40" scenegeometry="720;636;700;616;40;40"/>
+    </final>
+    <final id="Final_13">
+        <qt:editorinfo geometry="881;619;-20;-20;40;40" scenegeometry="881;619;861;599;40;40"/>
     </final>
 </scxml>
