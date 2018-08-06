@@ -17,34 +17,6 @@ import numpy as np
 from copy import deepcopy
 
 
-
-'''
-class Moveskill(smach.State):
-    def __init__(self,outcomes=["preempt","success"], io_keys=["id"]):
-        smach.State.__init__(self,outcomes,io_keys=io_keys )
-
-    def execute(self,ud):
-        if(ud.id==1):
-            return "success"
-        else:
-            return "preempt"
-'''
-class Choice(smach.State):
-    def __init__(self,outcomes=["Transition_3","Transition_4","preempt"], io_keys=["movement"]):
-        smach.State.__init__(self,outcomes,io_keys=io_keys )
-
-    def execute(self,ud):
-        if(ud.movement=="Movearticular"):
-            ma=Movearticular()
-            print " i m here"
-            return "Transition_3"
-        elif(ud.movement=="Movecartesian"):
-            mc=Movecartesian()
-            print "i m in cartesian state"
-            return "Transition_4"
-        else:
-            return "preempt"
-
 class Movearticular(smach.State):
     def __init__(self,outcomes=["preempt","success"], io_keys=["group","position","joint_name","vel_factor","type"]):
         smach.State.__init__(self,outcomes,io_keys=io_keys )
@@ -106,41 +78,57 @@ class Movecartesian(smach.State):
         self.group=None
 
     def execute(self, ud):
+        print "Cartesian path"
         self.group = moveit_commander.MoveGroupCommander("manipulator")
-        endeffector=self.group.get_end_effector_link()
+        rospy.sleep(10)
         Referencelink="/base_link"
         self.group.set_pose_reference_frame(Referencelink)
         self.group.allow_replanning(True)
         self.group.set_goal_position_tolerance(0.01)
         self.group.set_goal_orientation_tolerance(0.1)
+        endeffector=self.group.get_end_effector_link()
         start_pose = self.group.get_current_pose(endeffector).pose
+        end_pose = deepcopy(start_pose)
         waypoints = []
-        waypoints.append(start_pose)
-        # first orient gripper and move forward (+x)
         wpose = deepcopy(start_pose)
-        wpose.position.z += 0.74
+        #wpose.position.x += 0.2
+        wpose.position.x -= ud.target[0]
+        wpose.position.y -= ud.target[1]
+        #wpose.position.z += ud.target[2]
+        wpose.orientation.x += ud.target[3]
+        wpose.orientation.y += ud.target[4]
+        wpose.orientation.z += ud.target[5]
+        wpose.orientation.w += ud.target[6]
         waypoints.append(deepcopy(wpose))
+
+
         fraction = 0.0
-        maximum_points = 10
+        maximum_points =100
         counter = 0
         # Set the internal state to the current state
         self.group.set_start_state_to_current_state()
         # Plan the Cartesian path connecting the waypoints
         while fraction < 1.0 and counter < maximum_points:
             (plan, fraction) = self.group.compute_cartesian_path (waypoints, 0.01, 0.0, True)
+            print fraction
             # Increment the number of counter
             counter += 1
             # Print out a progress message
-            if counter % 10 == 0:
+            if counter % 100 == 0:
                 rospy.loginfo("Still trying after " + str(counter) + " counter...")
 
         # If we have a complete plan, execute the trajectory
-        if fraction == 1.0:
+        if fraction==1.0:
             rospy.loginfo("Path computed successfully. Moving the arm.")
             self.group.execute(plan)
-            rospy.sleep(1)
+            rospy.sleep(5)
             rospy.loginfo("Path execution complete.")
             return "success"
         else:
-            rospy.loginfo("Path planning failed with only " + str(fraction) + " success after " + str(maxtries) + " counter.")
+            rospy.loginfo("Path planning failed with only " + str(fraction) + " success after " + str(maximum_points) + " counter.")
             return "preempt"
+          # Shut down MoveIt cleanly
+        moveit_commander.roscpp_shutdown()
+
+        # Exit MoveIt
+        moveit_commander.os._exit(0)
