@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" binding="early" xmlns:qt="http://www.qt.io/2015/02/scxml-ext" name="ssm_moveit" qt:editorversion="4.4.1" initial="InitMoveGroup">
+    <qt:editorinfo initialGeometry="203.73;45.46;-20;-20;40;40"/>
+    <state id="InitMoveGroup">
+        <qt:editorinfo scenegeometry="188.23;185.98;128.23;135.98;151;111" geometry="188.23;185.98;-60;-50;151;111"/>
+        <transition type="external" event="success" target="Movearticular">
+            <qt:editorinfo movePoint="25.44;4.07"/>
+        </transition>
+        <transition type="external" event="preempt" target="Final_15"/>
+        <datamodel>
+            <data id="group" expr="manipulator"/>
+        </datamodel>
+    </state>
+    <final id="Final_15">
+        <qt:editorinfo scenegeometry="428.89;191.48;408.89;171.48;40;40" geometry="428.89;191.48;-20;-20;40;40"/>
+    </final>
+    <final id="Final_5">
+        <qt:editorinfo scenegeometry="522.51;435.07;502.51;415.07;40;40" geometry="522.51;435.07;-20;-20;40;40"/>
+    </final>
+    <state id="Movearticular">
+        <qt:editorinfo scenegeometry="166.73;367.20;106.73;317.20;194;100" geometry="166.73;367.20;-60;-50;194;100"/>
+        <transition type="external" event="success" target="Movearticular1">
+            <qt:editorinfo movePoint="28.50;0" startTargetFactors="57.65;83.62" endTargetFactors="56.77;28.47"/>
+        </transition>
+        <transition type="external" event="preempt" target="Final_5"/>
+        <datamodel>
+            <data id="vel_factor" expr="0.5"/>
+            <data expr="{'shoulder_pan_joint':80,'shoulder_lift_joint':-74,'elbow_joint':68,'wrist_1_joint':57,'wrist_2_joint':-40}" id="position_js"/>
+            <data id="type" expr="degree"/>
+            <data id="joint_name" expr="['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint', 'wrist_1_joint','wrist_2_joint','wrist_3_joint']"/>
+        </datamodel>
+    </state>
+    <state id="Movearticular1">
+        <qt:editorinfo scenegeometry="174.85;530.52;127.29;497.52;167.13;100" geometry="174.85;530.52;-47.56;-33;167.13;100"/>
+        <transition type="external" event="success" target="Movearticular2">
+            <qt:editorinfo movePoint="44.78;6.11"/>
+        </transition>
+        <transition type="external" event="preempt" target="Final_7"/>
+        <datamodel>
+            <data id="target" expr="[0.2, 0.2, 0.2, 0.7, 0.7, 0.7,0.7]"/>
+        </datamodel>
+    </state>
+    <final id="Final_7">
+        <qt:editorinfo scenegeometry="493.89;557.70;473.89;537.70;40;40" geometry="493.89;557.70;-20;-20;40;40"/>
+    </final>
+    <state id="GetJS">
+        <qt:editorinfo scenegeometry="717.44;320.70;657.44;270.70;198;193" geometry="717.44;320.70;-60;-50;198;193"/>
+        <transition type="external" event="success" target="Movearticular">
+            <qt:editorinfo endTargetFactors="76.56;50.44"/>
+        </transition>
+        <transition type="external" event="preempt" target="Final_9">
+            <qt:editorinfo movePoint="33.59;13.23"/>
+        </transition>
+    </state>
+    <final id="Final_9">
+        <qt:editorinfo scenegeometry="919.27;646.24;899.27;626.24;40;40" geometry="919.27;646.24;-20;-20;40;40"/>
+    </final>
+    <state id="Movearticular2">
+        <qt:editorinfo scenegeometry="192.86;756.14;132.86;706.14;156;100" geometry="192.86;756.14;-60;-50;156;100"/>
+        <transition type="external" event="preempt" target="Final_8">
+            <qt:editorinfo movePoint="24.42;4.07"/>
+        </transition>
+        <transition type="external" event="success" target="InitMoveGroup">
+            <qt:editorinfo localGeometry="-175.24;-339.90" endTargetFactors="23.07;40.26"/>
+        </transition>
+    </state>
+    <final id="Final_8">
+        <qt:editorinfo scenegeometry="465.39;771.41;445.39;751.41;40;40" geometry="465.39;771.41;-20;-20;40;40"/>
+    </final>
+</scxml>
