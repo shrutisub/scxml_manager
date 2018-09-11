@@ -99,6 +99,7 @@ class Movearticular(smach.State):
                 rospy.logerr(ex)
                 return "preempt"
             return "success"
+
 class Movecartesian(smach.State):
 
         def __init__(self,outcomes=["preempt","success"], io_keys=["target"]):
@@ -124,7 +125,7 @@ class Movecartesian(smach.State):
                 return pose
         def execute(self, ud):
             print "Cartesian path"
-            self.group = moveit_commander.MoveGroupCommander("manipulator")
+            self.group = moveit_commander.MoveGroupCommander("denso_robot")
             rospy.sleep(5)
             Referencelink="/base_link"
             self.group.set_pose_reference_frame(Referencelink)
