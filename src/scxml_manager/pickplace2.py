@@ -99,3 +99,63 @@ class Movearticular(smach.State):
                 rospy.logerr(ex)
                 return "preempt"
             return "success"
+class Movecartesian(smach.State):
+
+        def __init__(self,outcomes=["preempt","success"], io_keys=["target"]):
+            smach.State.__init__(self,outcomes,io_keys=io_keys )
+            self.group=None
+
+        def convertToPose(self, pt):
+            if(isinstance(pt,Pose)):
+                return pt
+            else:
+                pose = Pose()
+                if(len(pt) != 7):
+                    rospy.logerr("[MoveCartesian] Not well formated point in the userdata 'target' : %s "%str(pt))
+                    raise Exception()
+                else:
+                    pose.position.x = pt[0]
+                    pose.position.y = pt[1]
+                    pose.position.z = pt[2]
+                    pose.orientation.x = pt[3]
+                    pose.orientation.y = pt[4]
+                    pose.orientation.z = pt[5]
+                    pose.orientation.w = pt[6]
+                return pose
+        def execute(self, ud):
+            print "Cartesian path"
+            self.group = moveit_commander.MoveGroupCommander("manipulator")
+            rospy.sleep(5)
+            Referencelink="/base_link"
+            self.group.set_pose_reference_frame(Referencelink)
+            self.group.allow_replanning(True)
+            self.group.set_goal_position_tolerance(0.01)
+            self.group.set_goal_orientation_tolerance(0.1)
+            endeffector=self.group.get_end_effector_link()
+            waypoints = []
+            if(isinstance(ud.target,list)):
+                if(isinstance(ud.target[0],list)): ##multiple points
+                   for pt in ud.target:
+                       print "I am here"
+                       waypoints.append(self.convertToPose(pt))
+                else: ##only one point
+                    print "I am here in else"
+                    waypoints.append(self.convertToPose(ud.target))
+            fraction = 0.0
+            # Set the internal state to the current state
+            self.group.set_start_state_to_current_state()
+            # Plan the Cartesian path connecting the waypoints
+            while fraction < 1.0:
+                (plan, fraction) = self.group.compute_cartesian_path (waypoints, 0.01, 0.0, True)
+                print fraction
+            # If we have a complete plan, execute the trajectory
+            if fraction==1.0:
+                rospy.loginfo("Path computed successfully. Moving the arm.")
+                self.group.execute(plan)
+                rospy.sleep(5)
+
+                rospy.loginfo("Path execution complete.")
+                return "success"
+            else:
+                rospy.loginfo("Path planning failed with only " + str(fraction) + " success after " + str(maximum_points) + " counter.")
+                return "preempt"
