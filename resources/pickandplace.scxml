@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" binding="early" xmlns:qt="http://www.qt.io/2015/02/scxml-ext" name="ssm_moveit" qt:editorversion="4.4.1" initial="InitMoveGroup">
+    <qt:editorinfo initialGeometry="259.94;83.14;-20;-20;40;40"/>
+    <state id="InitMoveGroup">
+        <qt:editorinfo geometry="244.44;159.52;-60;-50;151;111" scenegeometry="244.44;159.52;184.44;109.52;151;111"/>
+        <transition type="external" event="success" target="Movearticular_home">
+            <qt:editorinfo movePoint="25.44;4.07"/>
+        </transition>
+        <transition type="external" event="preempt" target="Final_15"/>
+        <datamodel>
+            <data id="group" expr="denso_robot"/>
+        </datamodel>
+    </state>
+    <final id="Final_15">
+        <qt:editorinfo geometry="580.40;165.02;-20;-20;40;40" scenegeometry="580.40;165.02;560.40;145.02;40;40"/>
+    </final>
+    <final id="Final_5">
+        <qt:editorinfo geometry="580.40;302.06;-20;-20;40;40" scenegeometry="580.40;302.06;560.40;282.06;40;40"/>
+    </final>
+    <state id="Movearticular_home">
+        <qt:editorinfo geometry="222.94;302.06;-60;-50;194;100" scenegeometry="222.94;302.06;162.94;252.06;194;100"/>
+        <transition type="external" event="preempt" target="Final_5"/>
+        <datamodel>
+            <data id="vel_factor" expr="0.5"/>
+            <data expr="{'joint_1':-0.1793,'joint_2':-0.0660,'joint_3':1.7108,'joint_4':-0.0777,'joint_5':1.4982,'joint_6':0.0}" id="position_js"/>
+            <data id="type" expr="radian"/>
+            <data id="joint_name" expr="['joint_1', 'joint_2', 'joint_3', 'joint_4','joint_5','joint_6']"/>
+        </datamodel>
+        <transition type="external" event="success" target="Movearticular_pick">
+            <qt:editorinfo startTargetFactors="52.53;74.77" endTargetFactors="56.77;28.47" movePoint="28.50;0"/>
+        </transition>
+    </state>
+    <state id="Movearticular_pick">
+        <qt:editorinfo geometry="215.78;427.64;-47.56;-33;167.13;100" scenegeometry="215.78;427.64;168.22;394.64;167.13;100"/>
+        <transition type="external" event="preempt" target="Final_7"/>
+        <datamodel>
+            <data id="vel_factor" expr="0.5">
+                <qt:editorinfo geometry="26.46;34.60;0;0;0;0"/>
+            </data>
+            <data expr="{'joint_1':-0.8964,'joint_2':-0.0210,'joint_3':1.9318,'joint_4':0.0259,'joint_5':0.7205,'joint_6':0.0}" id="position_js">
+                <qt:editorinfo geometry="56.46;64.60;0;0;0;0"/>
+            </data>
+            <data id="type" expr="radian">
+                <qt:editorinfo geometry="86.46;94.60;0;0;0;0"/>
+            </data>
+            <data id="joint_name" expr="['joint_1', 'joint_2', 'joint_3', 'joint_4','joint_5','joint_6']">
+                <qt:editorinfo geometry="116.46;124.60;0;0;0;0"/>
+            </data>
+        </datamodel>
+        <transition type="external" event="success" target="Movecartesian"/>
+    </state>
+    <final id="Final_7">
+        <qt:editorinfo geometry="580.40;444.64;-20;-20;40;40" scenegeometry="580.40;444.64;560.40;424.64;40;40"/>
+    </final>
+    <state id="Movearticular_place">
+        <qt:editorinfo geometry="241.94;1019.18;-83.88;-50;203.75;100" scenegeometry="241.94;1019.18;158.06;969.18;203.75;100"/>
+        <transition type="external" event="preempt" target="Final_8">
+            <qt:editorinfo movePoint="24.42;4.07"/>
+        </transition>
+        <datamodel>
+            <data id="vel_factor" expr="0.5">
+                <qt:editorinfo geometry="146.46;154.60;0;0;0;0"/>
+            </data>
+            <data expr="{'joint_1':1.1898,'joint_2':-0.0210,'joint_3':1.8765,'joint_4':0.0259,'joint_5':0.7205,'joint_6':0.0}" id="position_js">
+                <qt:editorinfo geometry="176.46;184.60;0;0;0;0"/>
+            </data>
+            <data id="type" expr="radian">
+                <qt:editorinfo geometry="206.46;214.60;0;0;0;0"/>
+            </data>
+            <data id="joint_name" expr="['joint_1', 'joint_2', 'joint_3', 'joint_4','joint_5','joint_6']">
+                <qt:editorinfo geometry="236.46;244.60;0;0;0;0"/>
+            </data>
+        </datamodel>
+        <transition type="external" event="success" target="Movearticular_home">
+            <qt:editorinfo endTargetFactors="12.67;58.66" movePoint="65.28;1.02" localGeometry="-233.60;-0.01;-233.60;-708.46"/>
+        </transition>
+    </state>
+    <final id="Final_8">
+        <qt:editorinfo geometry="580.40;1019.18;-20;-20;40;40" scenegeometry="580.40;1019.18;560.40;999.18;40;40"/>
+    </final>
+    <state id="Movecartesian">
+        <qt:editorinfo geometry="228.79;630.51;-60;-50;166;105" scenegeometry="228.79;630.51;168.79;580.51;166;105"/>
+        <transition type="external" event="success" target="Movearticular_pick_back">
+            <qt:editorinfo startTargetFactors="61.25;85.95" endTargetFactors="53.39;17.57" movePoint="44.78;6.11"/>
+        </transition>
+        <transition type="external" event="preempt" target="Final_11"/>
+        <datamodel>
+            <data id="target" expr="[0.365,-0.449,0.345526,-0.100,-0.232,-0.426,0.869]">
+                <qt:editorinfo geometry="25.50;33.66;0;0;0;0"/>
+            </data>
+        </datamodel>
+    </state>
+    <final id="Final_11">
+        <qt:editorinfo geometry="580.40;633.01;-20;-20;40;40" scenegeometry="580.40;633.01;560.40;613.01;40;40"/>
+    </final>
+    <state id="Movearticular_pick_back">
+        <qt:editorinfo geometry="231.08;747.40;-84.19;-33;240.39;100" scenegeometry="231.08;747.40;146.89;714.40;240.39;100"/>
+        <datamodel>
+            <data id="vel_factor" expr="0.5">
+                <qt:editorinfo geometry="26.46;34.60;0;0;0;0"/>
+            </data>
+            <data expr="{'joint_1':-0.8964,'joint_2':-0.0210,'joint_3':1.9318,'joint_4':0.0259,'joint_5':0.7205,'joint_6':0.0}" id="position_js">
+                <qt:editorinfo geometry="56.46;64.60;0;0;0;0"/>
+            </data>
+            <data id="type" expr="radian">
+                <qt:editorinfo geometry="86.46;94.60;0;0;0;0"/>
+            </data>
+            <data id="joint_name" expr="['joint_1', 'joint_2', 'joint_3', 'joint_4','joint_5','joint_6']">
+                <qt:editorinfo geometry="116.46;124.60;0;0;0;0"/>
+            </data>
+        </datamodel>
+        <transition type="external" event="success" target="Movearticular_home2">
+            <qt:editorinfo movePoint="-38.76;7.14"/>
+        </transition>
+        <transition type="external" event="preempt" target="Final_11">
+            <qt:editorinfo movePoint="3.06;8.16" localGeometry="313.32;0"/>
+        </transition>
+    </state>
+    <state id="Movearticular_home2">
+        <qt:editorinfo geometry="230.09;893.51;-60;-50;194;100" scenegeometry="230.09;893.51;170.09;843.51;194;100"/>
+        <datamodel>
+            <data id="vel_factor" expr="0.5"/>
+            <data expr="{'joint_1':-0.1793,'joint_2':-0.0660,'joint_3':1.7108,'joint_4':-0.0777,'joint_5':1.4982,'joint_6':0.0}" id="position_js"/>
+            <data id="type" expr="radian"/>
+            <data id="joint_name" expr="['joint_1', 'joint_2', 'joint_3', 'joint_4','joint_5','joint_6']"/>
+        </datamodel>
+        <transition type="external" event="preempt" target="Final_11">
+            <qt:editorinfo localGeometry="313.32;0"/>
+        </transition>
+        <transition type="external" event="success" target="Movearticular_place"/>
+    </state>
+</scxml>
