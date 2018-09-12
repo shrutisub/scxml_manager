@@ -22,18 +22,10 @@ class InitMoveGroup(smach.State):
         def __init__(self,outcomes=["success","preempt"],io_keys=["group"]):
             smach.State.__init__(self,outcomes,io_keys=io_keys)
         def execute(self,ud):
-            if ud.group=='manipulator':
-                print "i m here"
+            if ud.group=='denso_robot':
                 return "success"
             else:
                 return "preempt"
-class CameraSimulator(smach.State):
-    #TODO
-        def __init__(self,outcomes=["success"],io_keys=["posevalues"]):
-            smach.State.__init__(self,outcomes,io_keys=io_keys)
-        def execute(self,ud):
-            print ud.posevalues
-            return "success"
 
 class GetJS(smach.State):
         def __init__(self,outcomes=["success","preempt"]):
@@ -81,8 +73,7 @@ class Movearticular(smach.State):
             target=[]
             target_values=[]
             target_joints=[]
-            self.group = moveit_commander.MoveGroupCommander("manipulator")
-            rospy.sleep(5)
+            self.group = moveit_commander.MoveGroupCommander("denso_robot")
             self.group.set_max_velocity_scaling_factor(float(ud.vel_factor))
             self.group.set_start_state_to_current_state()
             #target of the joints can be dict,list or string and thus we have to check the instances passed as all of these target types
@@ -90,9 +81,7 @@ class Movearticular(smach.State):
                 target=self.check_angle_type(ud.type,ud.position_js)
             elif isinstance(ud.position_js,dict):
                 ma_position = self.set_joints(ud.position_js)
-                print("The position %s"%ma_position)
                 target=self.check_angle_type(ud.type, ma_position)
-                print("target values", target)
             elif isinstance(ud.position_js,JointState):#TODO #isinstance(ud.position_js,GetJS)
                 #position=self.get_joints(ud.joint_name,ud.position_js)
                 target=self.check_angle_type(ud.type,ud.position_js)
@@ -101,7 +90,6 @@ class Movearticular(smach.State):
                 motionplan=self.group.plan()
                 self.group.execute(motionplan) #executing the motion motionplan
                 #self.group.go()
-                rospy.sleep(1)
             except Exception as ex:
                 rospy.logerr(ex)
                 return "preempt"
@@ -109,7 +97,7 @@ class Movearticular(smach.State):
 
 class Movecartesian(smach.State):
 
-        def __init__(self,outcomes=["preempt","success"], io_keys=["group","target"]):
+        def __init__(self,outcomes=["preempt","success"], io_keys=["target"]):
             smach.State.__init__(self,outcomes,io_keys=io_keys )
             self.group=None
 
@@ -131,9 +119,7 @@ class Movecartesian(smach.State):
                     pose.orientation.w = pt[6]
                 return pose
         def execute(self, ud):
-            print "Cartesian path"
-            self.group = moveit_commander.MoveGroupCommander("manipulator")
-            rospy.sleep(5)
+            self.group = moveit_commander.MoveGroupCommander("denso_robot")
             Referencelink="/base_link"
             self.group.set_pose_reference_frame(Referencelink)
             self.group.allow_replanning(True)
@@ -144,10 +130,8 @@ class Movecartesian(smach.State):
             if(isinstance(ud.target,list)):
                 if(isinstance(ud.target[0],list)): ##multiple points
                    for pt in ud.target:
-                       print "I am here"
                        waypoints.append(self.convertToPose(pt))
                 else: ##only one point
-                    print "I am here in else"
                     waypoints.append(self.convertToPose(ud.target))
             fraction = 0.0
             # Set the internal state to the current state
@@ -155,13 +139,10 @@ class Movecartesian(smach.State):
             # Plan the Cartesian path connecting the waypoints
             while fraction < 1.0:
                 (plan, fraction) = self.group.compute_cartesian_path (waypoints, 0.01, 0.0, True)
-                print fraction
             # If we have a complete plan, execute the trajectory
             if fraction==1.0:
                 rospy.loginfo("Path computed successfully. Moving the arm.")
                 self.group.execute(plan)
-                rospy.sleep(5)
-
                 rospy.loginfo("Path execution complete.")
                 return "success"
             else:
